@@ -1,16 +1,17 @@
 from http.server import SimpleHTTPRequestHandler, HTTPServer
-
-ROOT = 'https://www.newfairs.com'
-PORT = 8000
+params = []
 
 
 class MyHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         self.send_response(301)
-        self.send_header('Location',  ROOT + self.path)
+        self.send_header('Location',  params[0] + self.path)
         self.end_headers()
 
-server_address = ("", PORT)
-httpd = HTTPServer(server_address, MyHandler)
-print("serving at port %s" % PORT)
-httpd.serve_forever()
+
+def main(target, port):
+    server_address = ("", port)
+    params.append(target)
+    httpd = HTTPServer(server_address, MyHandler)
+    print("serving at port %s" % port)
+    httpd.serve_forever()

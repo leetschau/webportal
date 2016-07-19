@@ -6,10 +6,43 @@
 
 ## Redirect实现
 
-使用`python portal_py2.py`启动Python 2.7版本的redirect服务，
-使用`python3 portal.py`启动Python 3.x版本的redirect服务。
+portal_py2.py是Python 2.7版本的redirect服务，
+portal.py是Python 3.x版本的redirect服务。
+
+启动服务：
+
+```
+virtualenv -p /usr/bin/python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+python server.py
+```
+
+查看日志：`tail -f server.log`
+
+停止服务：`pkill python`（请先使用`pgrep python`确认进程号正确）
 
 ## 域名解析
 
 redirect服务将任何 HTTP 请求通过301 redirect 到目标地址。
 定义哪些URL应该被转发，则是负载均衡器（或者nginx/apache）的职责。
+
+# Discussions
+
+## redirect cache问题
+
+使用Firefox调试时，由于Firefox默认缓存了redirect目标，导致代码更新时，
+浏览器中看不到效果，关闭Firefox对redirect缓存的方法请参考
+[Firefox 5 'caching' 301 redirects](http://stackoverflow.com/questions/6980192/firefox-5-caching-301-redirects)
+
+## 其他参考资源
+
+* http://stackoverflow.com/questions/2506932/how-do-i-forward-a-request-to-a-different-url-in-python
+
+* https://docs.python.org/3/library/http.server.html#http.server.SimpleHTTPRequestHandler
+
+* http://xlsxwriter.readthedocs.io/example_http_server3.html
+
+* http://stackoverflow.com/questions/11146128/python-daemon-and-stdout
+
+* https://pypi.python.org/pypi/python-daemon/

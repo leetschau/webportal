@@ -1,11 +1,9 @@
 import daemon
 import portal
 
-ROOT = 'https://www.newfairs.com'
-PORT = 8000
 logfile = 'server.log'
 
 if __name__ == '__main__':
-    logger = open(logfile, 'w+')
+    logger = open(logfile, 'a')
     with daemon.DaemonContext(stdout=logger, stderr=logger):
-        portal.main(ROOT, PORT)
+        portal.main()

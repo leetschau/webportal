@@ -30,6 +30,22 @@ python dserver.py
 redirect服务将任何 HTTP 请求通过301 redirect 到目标地址。
 定义哪些URL应该被转发，则是负载均衡器（或者nginx/apache）的职责。
 
+在青云上的配置过程（以配置针对niuzhanwang.com的转发为例）：
+
+1. 在niuzhanwang.com的DNS上配置牛展网公网IP，包括"@"和"www"；
+
+1. 创建新的转发策略webportal，在里面添加一条新的"按域名转发"：
+   `www.niuzhanwang.com niuzhanwang.com`：
+
+1. 在负载均衡器的 HTTP 监听器上添加两个后端 webportal1/2：
+   指向路由器端口7000/7001端口；
+
+1. 在路由器的*端口转发*中添加两条规则webportal1/2：
+   从路由的7000/7001端口指向服务器192.168.100.21/22的7000端口；
+
+添加新的域名，只要在自己的DNS上设置好公网IP，
+然后在转发策略webportal里把自己的域名加上就可以了。
+
 # Discussions
 
 ## redirect cache问题

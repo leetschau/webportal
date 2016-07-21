@@ -35,10 +35,12 @@ redirect服务将任何 HTTP 请求通过301 redirect 到目标地址。
 1. 在niuzhanwang.com的DNS上配置牛展网公网IP，包括"@"和"www"；
 
 1. 创建新的转发策略webportal，在里面添加一条新的"按域名转发"：
-   `www.niuzhanwang.com niuzhanwang.com`：
+   `^(www.)?niuzhanwang.com`：
 
 1. 在负载均衡器的 HTTP 监听器上添加两个后端 webportal1/2：
-   指向路由器端口7000/7001端口；
+   指向路由器端口7000/7001端口，并绑定转发策略webportal，
+   如果不绑定，所有不符合任何转发策略的url都会被这个后端接收，
+   这显然是错误的；
 
 1. 在路由器的*端口转发*中添加两条规则webportal1/2：
    从路由的7000/7001端口指向服务器192.168.100.21/22的7000端口；
@@ -71,6 +73,13 @@ https://github.com/fabric/fabric/issues/1373
 启动daemon后要等待一段时间再退出shell，否则会导致daemon启动失败，原因不清楚。
 对应到代码，就是`run('. venv/bin/activate && python dserver.py && sleep 5')`中
 ` && sleep 5`是必须的，当然值不一定是5。
+
+## 转发策略的写法
+
+为什么转发策略要写成`^(www.)?niuzhanwang.com$`，
+而不是`www.niuzhanwang.com niuzhanwang.com`？
+因为`www.niuzhanwang.com`的意思是`*niuzhanwang.com`，
+所以`beta.niuzhanwang.com`也会被转发，这显然是错误的。
 
 ## 其他参考资源
 
